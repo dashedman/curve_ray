@@ -1,9 +1,8 @@
-use std::ops::{Mul, Sub};
-
 use bvh::{
-    aabb::{Bounded, AABB},
+    aabb::{Bounded},
     bounding_hierarchy::BHShape,
 };
+use bvh::aabb::Aabb;
 use cgmath::{num_traits::Inv, Array, ElementWise, InnerSpace, Vector3, VectorSpace};
 
 use crate::utils::{get_vectors_relation, MinMaxIterExt, VectorExt};
@@ -377,8 +376,8 @@ impl CurveTriangle {
     }
 }
 
-impl Bounded for CurveTriangle {
-    fn aabb(&self) -> AABB {
+impl Bounded<f32, 3> for CurveTriangle {
+    fn aabb(&self) -> Aabb<f32, 3> {
         let (min_x, max_x) = self
             .base
             .vertexes
@@ -403,22 +402,13 @@ impl Bounded for CurveTriangle {
 
         // get bounds for surface by binary search and ray casting
 
-        AABB::with_bounds(
-            bvh::Vector3 {
-                x: min_x,
-                y: min_y,
-                z: min_z,
-            },
-            bvh::Vector3 {
-                x: max_x,
-                y: max_y,
-                z: max_z,
-            },
-        )
+        let min_p = nalgebra::Point3::new(min_x, min_y, min_z);
+        let max_p = nalgebra::Point3::new(max_x, max_y, max_z);
+        Aabb::with_bounds(min_p, max_p)
     }
 }
 
-impl BHShape for CurveTriangle {
+impl BHShape<f32, 3> for CurveTriangle {
     fn set_bh_node_index(&mut self, index: usize) {
         self.bhv_node_index = index
     }

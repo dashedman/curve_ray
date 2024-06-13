@@ -10,10 +10,10 @@ impl Ray {
         self.origin + t * self.direction
     }
 
-    pub fn bvh_ray(&self) -> bvh::ray::Ray {
+    pub fn bvh_ray(&self) -> bvh::ray::Ray<f32, 3> {
         bvh::ray::Ray::new(
-            bvh::Vector3::new(self.origin.x, self.origin.y, self.origin.z),
-            bvh::Vector3::new(self.direction.x, self.direction.y, self.direction.z),
+            nalgebra::Point3::new(self.origin.x, self.origin.y, self.origin.z),
+            nalgebra::Vector3::new(self.direction.x, self.direction.y, self.direction.z),
         )
     }
 }

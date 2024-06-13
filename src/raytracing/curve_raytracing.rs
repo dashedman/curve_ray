@@ -1,6 +1,6 @@
 use std::time::SystemTime;
 
-use bvh::bvh::BVH;
+use bvh::bvh::Bvh;
 use glium::Rect;
 
 use crate::cpu_buffer::CPUBuffer;
@@ -18,7 +18,7 @@ pub fn draw_rect_for_curve_surface(
     if with_bvh.unwrap_or(false) {
         let bench_start = SystemTime::now();
         // build tree
-        bvh_opt = Some(BVH::build(shape));
+        bvh_opt = Some(Bvh::build(shape));
         let bench_end = SystemTime::now();
         println!("BVH built in {:?}", bench_end.duration_since(bench_start));
         // bvh_opt.as_ref().unwrap().pretty_print();
@@ -55,7 +55,7 @@ fn cast_ray(
     y: f32,
     camera: &Camera,
     shape: &Vec<CurveTriangle>,
-    bvh_opt: Option<&BVH>,
+    bvh_opt: Option<&Bvh<f32, 3>>,
 ) -> [f32; 3] {
     let ray = camera.get_ray_in_viewport(x, y);
 

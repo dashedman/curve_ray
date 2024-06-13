@@ -6,8 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-glium = "*"
+glium = "0.29.*"
 cgmath = {version = "*", features = ["swizzle"]}
 bvh = "*"
+nalgebra = "*"
 [dev-dependencies]
 criterion = "*"

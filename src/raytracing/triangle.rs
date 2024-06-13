@@ -1,8 +1,10 @@
 use bvh::{
-    aabb::{Bounded, AABB},
+    aabb::{Bounded},
     bounding_hierarchy::BHShape,
 };
-use cgmath::{InnerSpace, Matrix, Matrix3, Vector3, Zero};
+use bvh::aabb::Aabb;
+use nalgebra;
+use cgmath::{InnerSpace, Matrix, Matrix3, Zero, Vector3};
 
 use crate::utils::MinMaxIterExt;
 
@@ -89,27 +91,19 @@ impl Triangle {
     }
 }
 
-impl Bounded for Triangle {
-    fn aabb(&self) -> AABB {
+impl Bounded<f32, 3> for Triangle {
+    fn aabb(&self) -> Aabb<f32, 3> {
         let (min_x, max_x) = self.vertexes.iter().map(|&v| v[0]).min_max();
         let (min_y, max_y) = self.vertexes.iter().map(|&v| v[1]).min_max();
         let (min_z, max_z) = self.vertexes.iter().map(|&v| v[2]).min_max();
-        AABB::with_bounds(
-            bvh::Vector3 {
-                x: min_x,
-                y: min_y,
-                z: min_z,
-            },
-            bvh::Vector3 {
-                x: max_x,
-                y: max_y,
-                z: max_z,
-            },
-        )
+
+        let min_p = nalgebra::Point3::new(min_x, min_y, min_z);
+        let max_p = nalgebra::Point3::new(max_x, max_y, max_z);
+        Aabb::with_bounds(min_p, max_p)
     }
 }
 
-impl BHShape for Triangle {
+impl BHShape<f32, 3> for Triangle {
     fn set_bh_node_index(&mut self, index: usize) {
         self.bhv_node_index = index
     }

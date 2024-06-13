@@ -1,11 +1,10 @@
 use std::time::SystemTime;
-
 use bvh::bvh::Bvh;
 use glium::Rect;
-
 use crate::cpu_buffer::CPUBuffer;
-
-use super::{camera::Camera, triangle::Triangle, CurveTriangle};
+use crate::raytracing::camera::Camera;
+use crate::raytracing::curve_triangle::CurveTriangle;
+use crate::raytracing::triangle::Triangle;
 
 
 pub fn draw_rect_for_triangulation(
@@ -54,7 +53,6 @@ pub fn draw_rect_for_triangulation(
     );
 }
 
-
 fn cast_ray(
     x: f32,
     y: f32,
@@ -91,10 +89,10 @@ fn cast_ray(
         let bvh = bvh_opt.unwrap();
         let bvh_ray = ray.bvh_ray();
 
-        let traverse_iter = bvh.traverse_iterator(&bvh_ray, triangulation);
+        let traverce_iter = bvh.traverse_iterator(&bvh_ray, triangulation);
 
         let mut nearest_t = f32::INFINITY;
-        for triangle in traverse_iter {
+        for triangle in traverce_iter {
             match triangle.intersect(&ray) {
                 Ok((t, _)) => {
                     if nearest_t > t {

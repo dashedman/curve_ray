@@ -9,6 +9,7 @@ pub mod camera;
 pub mod common_raytracing;
 pub mod curve_raytracing;
 pub mod curve_triangle;
+pub mod trihedral_traycing;
 pub mod obb;
 mod rasterisator;
 pub mod ray;
@@ -40,7 +41,14 @@ pub fn draw_to(cpu_buffer: &mut CPUBuffer, camera: &Camera, shape: &mut Vec<Curv
         camera,
         Some(false),
     );
-    curve_raytracing::draw_rect_for_curve_surface(
+    // curve_raytracing::draw_rect_for_curve_surface(
+    //     cpu_buffer,
+    //     &second_half,
+    //     shape,
+    //     camera,
+    //     Some(false),
+    // );
+    trihedral_traycing::draw_rect_for_triangulation(
         cpu_buffer,
         &second_half,
         shape,
