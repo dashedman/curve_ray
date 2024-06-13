@@ -4,41 +4,15 @@ extern crate glium;
 pub mod cpu_buffer;
 pub mod raytracing;
 pub mod utils;
+mod shapes;
+mod materials;
 
 use cgmath::{Deg, InnerSpace, Rad, Vector3};
 use cpu_buffer::CPUBuffer;
 use glium::glutin;
 use glium::Surface;
 use raytracing::camera::Camera;
-use raytracing::curve_triangle::CurveTriangle;
-use raytracing::triangle::Triangle;
 
-fn get_sphere() -> Vec<CurveTriangle> {
-    let mut sphere = Vec::new();
-
-    for index in (0 as i8)..(8 as i8) {
-        let (x, y, z) = (
-            ((index & 1) == 0) as i8 * 2 - 1,
-            ((index & 2) == 0) as i8 * 2 - 1,
-            ((index & 4) == 0) as i8 * 2 - 1,
-        );
-        let sphere_part = CurveTriangle::new(
-            Triangle::new([
-                Vector3::new(x as f32, 0., 0.),
-                Vector3::new(0., y as f32, 0.),
-                Vector3::new(0., 0., z as f32),
-            ]),
-            [
-                Vector3::new(0., 0., 0.),
-                Vector3::new(0., 0., 0.),
-                Vector3::new(0., 0., 0.),
-            ],
-            [2., 2., 2.],
-        );
-        sphere.push(sphere_part);
-    }
-    sphere
-}
 
 fn main() {
     let width: u32 = 1000;
@@ -46,11 +20,11 @@ fn main() {
     let mut cpu_buffer = CPUBuffer::new(width, height);
     let camera = Camera {
         origin: Vector3 {
-            x: 2.,
-            y: 2.,
-            z: 2.,
+            x: 0.,
+            y: 0.,
+            z: -2.,
         },
-        direction: Vector3::new(-1., -1., -1.).normalize(),
+        direction: Vector3::new(0., 0., 1.).normalize(),
         fov: Rad::from(Deg(90.)).0,
         ratio: width as f32 / 2. / height as f32,
     };
